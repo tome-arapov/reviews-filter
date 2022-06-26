@@ -1,3 +1,4 @@
+<?php require_once __DIR__."/filterData.php" ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,8 +22,8 @@
                 <div class="col-6 offset-3 mb-4 ">
                     <h3>Filter reviews</h3>
                 </div>
-                <div class="col-6 offset-3">
-                    <form action="./filterData.php" method="POST">
+                <div class="col-6 offset-3 mb-5">
+                    <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
 
                         <div class="form-group">
                             <label for="rating">Order by rating:</label>
@@ -62,6 +63,48 @@
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </form>
                 </div>
+
+                    <?php if (!empty($_POST)) {?>
+                <div class="col-8 offset-2 <?= 'd-block' ?>">
+                    
+
+                    <table class="table table-dark">      
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Review text</th>
+                                <th scope="col">Date created:</th>
+                                <th scope="col">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $counter = 1;    
+                            ?>
+                        
+                            <?php foreach($filteredArr as $review) : ?>
+                                <tr>
+                                    <th scope="row"><?= $counter ?></th>
+                                    <td><?= $review['reviewText'] ?></td>
+                                    <td><?php $reviewDate = $review['reviewCreatedOnDate']; $date = strtotime($reviewDate); echo date('d.m.Y H:i:s', $date); ?></td>
+                                    <td><?= $review['rating'] ?></td>
+                                </tr>   
+                                
+                                <?php 
+                                    $counter++;    
+                                ?>
+                            <?php endforeach ?>
+                        
+                        </tbody>
+                    </table>
+                </div>
+                <?php } else {?>
+
+                    <div class="col-8 offset-2 text-center">
+                        <p class="lead font-weight-bold">Please enter information to render the reviews.</p>
+                    </div>
+                    
+                <?php } ?>    
             </div>
         </div>
         
